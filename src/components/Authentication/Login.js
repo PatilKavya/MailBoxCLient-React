@@ -1,43 +1,66 @@
-import { useRef } from 'react';
-import classes from './Login.module.css';
-import ForgotPassword from './ForgotPassword';
+import React, { useRef } from 'react'
+import { Button, Card, Container, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap';
+import styles from './Login.module.css'
+import { Link } from 'react-router-dom';
 
-const Login = (props) => {
-    const emailRef = useRef('');
-    const passwordRef = useRef('');
+const LogIn=()=>{
+const mailRef=useRef();
+const passwordRef=useRef();
 
-    const loginHandler = (event) => {
-        event.preventDefault();
 
-        const enteredEmail = emailRef.current.value;
-        const enteredPassword = passwordRef.current.value;
-        props.onLogin(enteredEmail, enteredPassword);
+async function submitHandler(e){
+e.preventDefault();
+const obj={mail:mailRef.current.value,password:passwordRef}
+const res=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBbTgBuoxB3rrKvFQy2oqLwKUpc7iJulQA',{
+    method:'POST',
+    body:JSON.stringify({
+        email:mailRef.current.value,
+        password:passwordRef.current.value,
+        returnSecureToken:true,
+    }),
+    headers:{
+      'Content-Type':'application/json'}
+    })
+
+    if(res.ok){
+      const data= await res.json();
+      console.log(data.email);
+    //   context.addToken(data.idToken)
+    //   context.addmail(data.email)
+    //   history.replace('/product')
     }
+    else{
+        const data=await res.json();
+        alert(data.error.message)
+    }
+}
 
-    return (
-        <section>
-            <div className={classes.login}>
-            <h1>Login</h1>
-                <form onSubmit={loginHandler}>
-                    <input 
-                        name='email'
-                        type='email'
-                        placeholder='Email'
-                        required
-                        ref={emailRef}
-                    />
-                    <input 
-                        name='password'
-                        type='password'
-                        placeholder='Password'
-                        required
-                        ref={passwordRef}
-                    />
-                    <button>Login</button>
-                </form>
-            </div>
-        </section>
-    )
-};
 
-export default Login;
+return (
+    <>
+    <Container>
+        <Card className={styles.section}>
+            <h2>LogIn</h2>
+            <Form onSubmit={submitHandler}>
+                <FormGroup className={styles.input}>
+                    <FormLabel htmlFor='mail'>Email</FormLabel>
+                    <FormControl type='mail' id='mail' ref={mailRef} required/>
+                </FormGroup>
+                <FormGroup className={styles.input}>
+                    <FormLabel htmlFor='password'>Password</FormLabel>
+                    <FormControl type='password' id='password' ref={passwordRef} required/>
+                </FormGroup>
+
+                <Button type='submit'>LogIn</Button><br/>
+
+            </Form>
+            <Link to='/password'>Forgot Password?</Link>
+        </Card>
+    </Container>
+    </>
+)
+
+
+}
+
+export default LogIn;
