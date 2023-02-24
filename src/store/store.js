@@ -4,7 +4,7 @@ import composeReducer from "./Composer";
 
 const store = configureStore({
     reducer: {
-        authentication: authReducer,
+        auth: authReducer,
         compose: composeReducer
     }
 })

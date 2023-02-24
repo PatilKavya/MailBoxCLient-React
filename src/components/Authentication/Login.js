@@ -1,11 +1,16 @@
 import React, { useRef } from 'react'
 import { Button, Card, Container, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap';
 import styles from './Login.module.css'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../store/Auth';
+
 
 const LogIn=()=>{
 const mailRef=useRef();
 const passwordRef=useRef();
+const history=useHistory();
+const dispatch=useDispatch();
 
 
 async function submitHandler(e){
@@ -25,9 +30,12 @@ const res=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signIn
     if(res.ok){
       const data= await res.json();
       console.log(data.email);
-    //   context.addToken(data.idToken)
-    //   context.addmail(data.email)
-    //   history.replace('/product')
+      const loginObj = {
+        idToken: data.idToken,
+        email: data.email,
+    }
+   dispatch(authActions.login(loginObj))
+       history.replace('/')
     }
     else{
         const data=await res.json();
