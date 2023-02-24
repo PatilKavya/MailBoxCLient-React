@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { composeActions } from '../../store/compose-reducer';
+import { composeActions } from '../../store/Composer';
 import classes from './Inbox.module.css';
 const Inbox = () => {
     const mails = useSelector(state => state.compose.fetchMail);
@@ -23,8 +23,7 @@ const Inbox = () => {
         setInterval(() => {
             fetchMails();
             console.log('called');
-        }, 200000)
-        // eslint-disable-next-line
+        }, 1000)
     }, []);
 
     const deleteHandler = async(mail) => {
@@ -39,7 +38,7 @@ const Inbox = () => {
             console.log(error);
         }
     }
-
+    
     return (
         <section className={classes.inbox}>
             <h1>Received Mails</h1>
@@ -54,7 +53,8 @@ const Inbox = () => {
                             return (
                                 <div key={mail.toString()}>
                                     <div
-                                        onClick={() =>singleMailHandler(mail)}>
+                                        // onClick={() =>singleMailHandler(mail)}
+                                        >
                                         <li
                                             style={{ 
                                                 listStyleType: read ? 'none' : 'disc',color: read ? 'black' : 'blue'
