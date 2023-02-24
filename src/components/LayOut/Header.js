@@ -1,8 +1,8 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
+import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useHistory } from 'react-router-dom';
+import {  NavLink, useHistory } from 'react-router-dom';
 import { authActions } from '../../store/Auth';
-import LogOut from './LogOut';
 import classes from "./Header.module.css";
 
 const Header = () => {
@@ -26,12 +26,12 @@ const Header = () => {
   }, [inboxMails]);
 
 
-
-
     const logOutHandler = () => {
       dispatch(authActions.logout());
       history.replace('/auth');
     };
+
+
   return (
     <header className={classes.header}>
       <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Circle-icons-mail.svg/2048px-Circle-icons-mail.svg.png' alt='mail'/>
@@ -82,10 +82,10 @@ const Header = () => {
                   </NavLink>
               </li>)}
             {isLogin && (
-              <LogOut 
+              <Button
                   onClick={logOutHandler}>
                   LogOut
-              </LogOut>
+              </Button>
             )}      
         </ul>
       </nav>

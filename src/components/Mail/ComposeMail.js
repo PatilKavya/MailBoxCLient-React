@@ -33,14 +33,14 @@ const ComposeMail = () => {
 
         try {
             const res = await axios.post(
-                `https://mail-box-8d69e-default-rtdb.firebaseio.com/${toEmailId}Inbox.json`,
+                `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${toEmailId}Inbox.json`,
                 mailDataObj
             );
             alert('Sent successfully');
             console.log(res);
 
             const sentRes = await axios.post(
-                `https://mail-box-8d69e-default-rtdb.firebaseio.com/${userMail}SentMail.json`,
+                `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}SentMail.json`,
                 mailDataObj
             );
             console.log(sentRes);
