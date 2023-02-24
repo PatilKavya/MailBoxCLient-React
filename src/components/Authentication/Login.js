@@ -43,6 +43,9 @@ const res=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signIn
     }
 }
 
+const clickHandler=()=>{
+    history.replace('/signIn')
+}
 
 return (
     <>
@@ -63,6 +66,7 @@ return (
 
             </Form>
             <Link to='/password'>Forgot Password?</Link>
+            <Button onClick={clickHandler}>Create Account</Button>
         </Card>
     </Container>
     </>

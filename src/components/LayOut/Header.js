@@ -28,7 +28,7 @@ const Header = () => {
 
     const logOutHandler = () => {
       dispatch(authActions.logout());
-      history.replace('/auth');
+      history.replace('/logIn');
     };
 
 

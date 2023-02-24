@@ -11,7 +11,7 @@ const Inbox = () => {
     const fetchMails = async () => {
         try {
             const res = await axios.get(
-            `https://mail-box-8d69e-default-rtdb.firebaseio.com/${userMail}Inbox.json`
+            `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}Inbox.json`
             );
             console.log(res);
             dispatch(composeActions.fetchMail(res.data))
@@ -22,15 +22,14 @@ const Inbox = () => {
     useEffect(() => {
         setInterval(() => {
             fetchMails();
-            console.log('called');
-        }, 1000)
+        }, 2000)
     }, []);
 
     const deleteHandler = async(mail) => {
         console.log(mail);
         try {
             const res = await axios.delete(
-            `https://mail-box-8d69e-default-rtdb.firebaseio.com/${userMail}Inbox/${mail}.json`
+            `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}Inbox/${mail}.json`
             );
             console.log(res);
             fetchMails();
