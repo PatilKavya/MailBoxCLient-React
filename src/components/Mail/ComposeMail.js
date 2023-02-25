@@ -6,41 +6,43 @@ import classes from './ComposeMail.module.css';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const ComposeMail = () => {
-    const emailRef = useRef('');
-    const subjectRef = useRef('');
+    const emailRef = useRef();
+    const subjectRef = useRef();
     let content;
 
     const onEditorStateChange = (event) => {
         content = event.getCurrentContent().getPlainText();
     }
 
+   
     const composeHandler = async(event) => {
+       
         event.preventDefault();
-
         const enteredEmail = emailRef.current.value;
         const enteredSubject = subjectRef.current.value;
         const userMailId = localStorage.getItem('email');
-        const userMail = userMailId.split('.').join('');
-        const toEmailId = enteredEmail.split('.').join('');
-
+        const a = userMailId.replace('@','');
+        const userMail=a.replace('.','');
+        const b= enteredEmail.replace('@','');
+        const toEmailId =b.replace('.','');
+    
         const mailDataObj = {
-            from: userMail,
+            from: userMailId,
             to: enteredEmail,
             subject: enteredSubject,
             body: content,
             read: false
         }
-
         try {
             const res = await axios.post(
-                `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${toEmailId}Inbox.json`,
+                `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${toEmailId}/inbox.json`,
                 mailDataObj
             );
             alert('Sent successfully');
             console.log(res);
 
             const sentRes = await axios.post(
-                `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}SentMail.json`,
+                `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}/sentMail.json`,
                 mailDataObj
             );
             console.log(sentRes);

@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {  NavLink, useHistory } from 'react-router-dom';
 import { authActions } from '../../store/Auth';
 import classes from "./Header.module.css";
+import axios from 'axios';
+import { composeActions } from '../../store/Composer';
 
 const Header = () => {
   const isLogin = useSelector(state => state.auth.isLogin);
@@ -12,39 +14,58 @@ const Header = () => {
   const history = useHistory();
   const [unreadCount, setUnreadCount] = useState(0);
 
+  
   useEffect(() => {
-    if (inboxMails) {
-      let count = 0;
-      Object.keys(inboxMails).map((mail) => {
-            if (inboxMails[mail].read === false) {
-              count = count + 1;
-              console.log(count);
-            setUnreadCount(count);
+    const userMailId = localStorage.getItem('email');
+    const a = userMailId.replace('@','');
+    const userMail=a.replace('.','');
+    const fetchMails = async () => {
+       
+      try {
+          const res = await axios.get(
+          `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}/inbox.json`
+          );
+        const  mails=res.data;
+        if (mails) {
+          let count = 0;
+          Object.keys(mails).map((mail) => {
+                if (mails[mail].read === false) {
+                  count = count + 1;
+                  console.log(count);
+                }
+                setUnreadCount(count);
+            
+          })
         }
-      });
-    }
-  }, [inboxMails]);
+          // dispatch(composeActions.fetchMail(res.data))
+          // setMails(res.data);
+      } catch (error) {
+          console.log(error);  
+         }}
+    fetchMails();
+  }, []);
 
 
     const logOutHandler = () => {
+       localStorage.removeItem('idToken');
+            localStorage.removeItem('email');
       dispatch(authActions.logout());
       history.replace('/logIn');
     };
 
 
   return (
-    <header className={classes.header}>
-      <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Circle-icons-mail.svg/2048px-Circle-icons-mail.svg.png' alt='mail'/>
-      <h1>Mail Box!!!</h1>
+    <header>
+      <h4>Mail Box</h4>
       <nav>
         <ul>
-          <li>
+          {/* <li>
               <NavLink 
                 to="/"  
                 activeClassName={classes.active} exact >
                 Home
               </NavLink>
-          </li>
+          </li> */}
           {!isLogin && (
             <li>
                 <NavLink to="/logIn"  
@@ -69,7 +90,7 @@ const Header = () => {
                   {unreadCount === 0 ? (
                     <></>
                   ) : (
-                    <span>{unreadCount} Unread</span>
+                    <span>({unreadCount}) Unread</span>
                   )}
                   </NavLink>
               </li>
@@ -80,9 +101,9 @@ const Header = () => {
                     activeClassName={classes.active} >
                     Sent Mails
                   </NavLink>
-              </li>)}
+              </li>)}<br/>
             {isLogin && (
-              <Button
+              <Button variant='secondary'
                   onClick={logOutHandler}>
                   LogOut
               </Button>

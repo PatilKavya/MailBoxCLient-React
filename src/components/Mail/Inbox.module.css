@@ -31,8 +31,8 @@
 
 .inbox button{
     color: white;
-    background-color: red;
-    border: 1px solid lightcoral;
+    background-color: rgb(100, 85, 85);
+    border: 1px solid rgb(15, 14, 14);
     text-align: center;
     width: 12%;
     cursor: pointer;
@@ -46,5 +46,5 @@
 
 .inbox button:hover,
 .inbox button:focus {
-    background-color: rgb(240, 101, 147);
+    background-color: rgb(17, 15, 16);
 }

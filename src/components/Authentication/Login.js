@@ -34,6 +34,8 @@ const res=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signIn
         idToken: data.idToken,
         email: data.email,
     }
+    localStorage.setItem('idToken', data.idToken);
+    localStorage.setItem('email',  data.email);
    dispatch(authActions.login(loginObj))
        history.replace('/')
     }

@@ -1,35 +1,47 @@
+import React,{useState} from 'react';
 import axios from 'axios';
 import { useEffect } from 'react';
+import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { composeActions } from '../../store/Composer';
 import classes from './Inbox.module.css';
+import SingleMail from './SingleMail';
+
+
 const Inbox = () => {
-    const mails = useSelector(state => state.compose.fetchMail);
+    const [mails,setMails]=useState([])
     const dispatch = useDispatch();
+    const [singleMail, setSingleMail] = useState(false);
+    console.log(mails)
+    
     const userMailId = localStorage.getItem('email');
-    const userMail = userMailId.split('.').join('');
+    const a = userMailId.replace('@','');
+    const userMail=a.replace('.','');
+
     const fetchMails = async () => {
+       
         try {
             const res = await axios.get(
-            `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}Inbox.json`
+            `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}/inbox.json`
             );
-            console.log(res);
+            console.log(res.data);
             dispatch(composeActions.fetchMail(res.data))
+            setMails(res.data);
         } catch (error) {
-            console.log(error);
-        }
-    }
-    useEffect(() => {
-        setInterval(() => {
-            fetchMails();
-        }, 2000)
+            console.log(error);  
+           }}
+    
+
+    useEffect(() => {  
+       
+      fetchMails();
     }, []);
 
     const deleteHandler = async(mail) => {
         console.log(mail);
         try {
             const res = await axios.delete(
-            `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}Inbox/${mail}.json`
+            `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}/inbox/${mail}.json`
             );
             console.log(res);
             fetchMails();
@@ -38,38 +50,62 @@ const Inbox = () => {
         }
     }
     
+    const singleMailHandler = async(mail) => {
+        setSingleMail(mail);
+        localStorage.setItem('key',mail)
+       
+         const obj={body:mails[mail].body,from:mails[mail].from,read:true,subject:mails[mail].subject,to:mails[mail].to}
+         console.log(obj)
+            try {
+                const res = await axios.put(
+                `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}/inbox/${mail}.json`,
+               obj
+                )
+                console.log(res.data);
+            } catch (err) {
+                console.log(err);
+            }
+    }
+
     return (
         <section className={classes.inbox}>
             <h1>Received Mails</h1>
             <div>
                 <ul>
-                {mails!== null &&
+                {!singleMail &&mails!== null &&
                         Object.keys(mails).map((mail) => {
-                            let read = false;
-                            if(mails[mail].read !== false){
-                                read = true;
-                            }
+                            // let read = false;
+                            // if(mails[mail].read !== false){
+                            //     read = true;
+                            // }
                             return (
                                 <div key={mail.toString()}>
-                                    <div
-                                        // onClick={() =>singleMailHandler(mail)}
-                                        >
                                         <li
                                             style={{ 
-                                                listStyleType: read ? 'none' : 'disc',color: read ? 'black' : 'blue'
+                                                listStyleType: mails[mail].read ? 'none' : 'disc' , color:mails[mail].read ? 'black' : 'blue'
                                                 }}>
-                                            <span>From: {mails[mail].from}</span>
-                                        </li> 
-                                    </div>
-                                    <button
+                                                    <div
+                                         onClick={() =>singleMailHandler(mail)}
+                                        >
+                                            { console.log(mails[mail].read)    }  
+                                            <span>From: {mails[mail].from}</span><br/>
+                                            <span>Subject: {mails[mail].subject}</span>
+                                            </div>
+                                            <span>
+                                                <Button style={{float:'right'}}
                                         onClick={() => deleteHandler(mail)}>
                                         Delete
-                                    </button>
+                                    </Button></span>
+                                        </li>   
                                     <hr />
                                 </div>)})}
                  </ul>
+                 {singleMail && (  
+                        <SingleMail mailDetails={{mails,singleMail}} />
+                        )}
             </div>
         </section>
+
     )
 };
 export default Inbox;
