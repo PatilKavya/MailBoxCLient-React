@@ -35,14 +35,14 @@ const ComposeMail = () => {
         }
         try {
             const res = await axios.post(
-                `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${toEmailId}/inbox.json`,
+                `https://mailbox-65454-default-rtdb.firebaseio.com/${toEmailId}/inbox.json`,
                 mailDataObj
             );
             alert('Sent successfully');
             console.log(res);
 
             const sentRes = await axios.post(
-                `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}/sentMail.json`,
+                `https://mailbox-65454-default-rtdb.firebaseio.com/${userMail}/sentMail.json`,
                 mailDataObj
             );
             console.log(sentRes);
@@ -69,7 +69,6 @@ const ComposeMail = () => {
                     ref={subjectRef}
                 />
                 <Editor
-                    // editorState={editorState}
                     toolbarClassName="toolbarClassName"
                     wrapperClassName="wrapperClassName"
                     editorClassName="editorClassName"

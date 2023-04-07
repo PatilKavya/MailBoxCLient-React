@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react'
 import { Button, Card, Container, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import styles from './SignUp.module.css'
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../store/Auth';
 
 const SignUp=()=>{
    const [pass,setPass] = useState(false);
@@ -9,12 +11,13 @@ const mailRef=useRef();
 const passwordRef=useRef();
 const confirmPasswordRef=useRef();
 const history=useHistory()
+let dispatch=useDispatch();
 
 async function submitHandler(e){
 e.preventDefault();
 const obj={mail:mailRef.current.value,password:passwordRef}
 
-const res=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBbTgBuoxB3rrKvFQy2oqLwKUpc7iJulQA',{
+const res=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAzafnuUaUS0RXs7eH6EvLfO39f40qUS_U',{
     method:'POST',
     body:JSON.stringify({
         email:mailRef.current.value,
@@ -32,6 +35,7 @@ const res=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp
     //   context.addToken(data.idToken)
     //   context.addmail(data.email)
     //   history.replace('/product')
+      dispatch(authActions.login({idToken:data.idToken,email:data.email}))
     history.replace('/logIn')
     }
     else{
@@ -64,7 +68,8 @@ return (
                     <FormLabel htmlFor='confirmPassword'>Confirm Password</FormLabel>
                     <FormControl type='password' id='confirmPassword' ref={confirmPasswordRef} required onChange={changeHandler}/>
                 </FormGroup>
-                <Button type='submit' className={styles.button} style={{visibility:pass ? 'visible':'hidden'}}>SignUp</Button><br/><hr/>
+                <Button type='submit' className={styles.button} style={{visibility:pass ? 'visible':'hidden'}}>SignUp</Button>
+                <br/><hr/>
                 <Link to='/logIn'><Button className={styles.button}>Have account?,LogIn</Button></Link>
             </Form>
         </Card>

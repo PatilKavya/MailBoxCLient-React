@@ -8,35 +8,40 @@ import Home from "./components/LayOut/Home";
 import ComposeMail from "./components/Mail/ComposeMail";
 import Inbox from "./components/Mail/Inbox";
 import Sent from "./components/Mail/Sent";
+import { useSelector } from "react-redux";
 
 function App() {
+
+  let auth=useSelector(state=>state.auth.isLogin);
+  console.log(auth)
+
   return (
     <>
       <Switch>
-        <Route path="/" exact>
-          <Header />
-        </Route>
-        <Route path='/compose'>
+       { auth && <Route path="/" exact>
+          <Header/>
+        </Route>}
+       {  auth &&<Route path='/compose'>
           <ComposeMail/>
-        </Route>
-        <Route path='/inbox'>
+        </Route>}
+      {   auth &&<Route path='/inbox'>
           <Inbox/>
-        </Route>
-        <Route path='/sent'>
+        </Route>}
+       { auth && <Route path='/sent'>
           <Sent/>
-        </Route>
-        <Route path='/home'>
+        </Route>}
+      {  auth && <Route path='/home'>
           <Home/>
-        </Route>
-        <Route path="/signIn">
+        </Route>}
+      { !auth && <Route path="/signIn">
           <SignUp />
-        </Route>
-        <Route path="/logIn">
+        </Route>}
+       <Route path="/logIn">
           <Login />
         </Route>
-        <Route path="/password">
+       {  auth &&<Route path="/password">
           <ForgotPassword />
-        </Route>
+        </Route>}
       </Switch>
     </>
   );

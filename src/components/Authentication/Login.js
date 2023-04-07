@@ -16,7 +16,7 @@ const dispatch=useDispatch();
 async function submitHandler(e){
 e.preventDefault();
 const obj={mail:mailRef.current.value,password:passwordRef}
-const res=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBbTgBuoxB3rrKvFQy2oqLwKUpc7iJulQA',{
+const res=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAzafnuUaUS0RXs7eH6EvLfO39f40qUS_U',{
     method:'POST',
     body:JSON.stringify({
         email:mailRef.current.value,

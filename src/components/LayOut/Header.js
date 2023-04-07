@@ -23,7 +23,7 @@ const Header = () => {
        
       try {
           const res = await axios.get(
-          `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}/inbox.json`
+          `https://mailbox-65454-default-rtdb.firebaseio.com/${userMail}/inbox.json`
           );
         const  mails=res.data;
         if (mails) {

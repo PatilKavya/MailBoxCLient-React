@@ -23,7 +23,7 @@ const Sent = () => {
     
         try {
             const res = await axios.get(
-            `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}/sentMail.json`
+            `https://mailbox-65454-default-rtdb.firebaseio.com/${userMail}/sentMail.json`
             );
             console.log(res.data);
             const data = res.data;
@@ -49,7 +49,7 @@ const Sent = () => {
         console.log(mail);
         try {
             const res = await axios.delete(
-            `https://mailbox-b3c7c-default-rtdb.firebaseio.com/${userMail}/sentMail/${mail}.json`)
+            `https://mailbox-65454-default-rtdb.firebaseio.com/${userMail}/sentMail/${mail}.json`)
             console.log(res);
             fetchSentMails();
         } catch (error) {
